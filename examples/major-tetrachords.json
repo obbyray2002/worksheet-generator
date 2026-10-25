@@ -1,0 +1,137 @@
+{
+  "format": "box-worksheet",
+  "version": 1,
+  "quiz": {
+    "title": "Major Tetrachords - Version 1",
+    "instructions": "Write the specified major tetrachord using accidentals.",
+    "timeLimit": "",
+    "copiesPerPage": 4,
+    "columns": 4,
+    "items": [
+      {
+        "prompt": "C♯",
+        "answers": [
+          "D♯",
+          "E♯",
+          "F♯",
+          "",
+          "",
+          "",
+          ""
+        ]
+      },
+      {
+        "prompt": "F♯",
+        "answers": [
+          "G♯",
+          "A♯",
+          "B"
+        ]
+      },
+      {
+        "prompt": "B",
+        "answers": [
+          "C♯",
+          "D♯",
+          "E"
+        ]
+      },
+      {
+        "prompt": "E",
+        "answers": [
+          "F♯",
+          "G♯",
+          "A"
+        ]
+      },
+      {
+        "prompt": "A",
+        "answers": [
+          "B",
+          "C♯",
+          "D"
+        ]
+      },
+      {
+        "prompt": "D",
+        "answers": [
+          "E",
+          "F♯",
+          "G"
+        ]
+      },
+      {
+        "prompt": "G",
+        "answers": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "prompt": "C",
+        "answers": [
+          "D",
+          "E♭",
+          "F"
+        ]
+      },
+      {
+        "prompt": "F",
+        "answers": [
+          "G",
+          "A",
+          "B♭"
+        ]
+      },
+      {
+        "prompt": "B♭",
+        "answers": [
+          "C",
+          "D",
+          "E♭"
+        ]
+      },
+      {
+        "prompt": "E♭",
+        "answers": [
+          "F",
+          "G",
+          "A♭"
+        ]
+      },
+      {
+        "prompt": "A♭",
+        "answers": [
+          "B♭",
+          "C",
+          "D♭"
+        ]
+      },
+      {
+        "prompt": "D♭",
+        "answers": [
+          "E♭",
+          "F",
+          "G♭"
+        ]
+      },
+      {
+        "prompt": "G♭",
+        "answers": [
+          "A♭",
+          "B♭",
+          "C♭"
+        ]
+      },
+      {
+        "prompt": "C♭",
+        "answers": [
+          "D♭",
+          "E♭",
+          "F♭"
+        ]
+      }
+    ]
+  }
+}

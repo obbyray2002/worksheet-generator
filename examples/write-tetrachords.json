@@ -1,0 +1,45 @@
+{
+  "format": "write-tetrachord",
+  "version": 1,
+  "quiz": {
+    "title": "Write the Major Tetrachord",
+    "instructions": "Write each major tetrachord.",
+    "timeLimit": "5 minutes",
+    "preset": "all",
+    "count": 15,
+    "keys": [
+      "treble-Cb",
+      "treble-Gb",
+      "treble-Db",
+      "treble-Ab",
+      "treble-Eb",
+      "treble-Bb",
+      "treble-F",
+      "treble-C",
+      "treble-G",
+      "treble-D",
+      "treble-A",
+      "treble-E",
+      "treble-B",
+      "treble-Fs",
+      "treble-Cs"
+    ],
+    "items": [
+      "treble-G",
+      "treble-Eb",
+      "treble-A",
+      "treble-F",
+      "treble-Cs",
+      "treble-Bb",
+      "treble-D",
+      "treble-Ab",
+      "treble-C",
+      "treble-Fs",
+      "treble-Gb",
+      "treble-E",
+      "treble-Cb",
+      "treble-B",
+      "treble-Db"
+    ]
+  }
+}

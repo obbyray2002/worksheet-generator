@@ -1,0 +1,45 @@
+{
+  "format": "write-key-signature",
+  "version": 1,
+  "quiz": {
+    "title": "Write the Key Signature",
+    "instructions": "Write each major key signature.",
+    "timeLimit": "5 minutes",
+    "preset": "all",
+    "count": 15,
+    "keys": [
+      "treble-Cb",
+      "treble-Gb",
+      "treble-Db",
+      "treble-Ab",
+      "treble-Eb",
+      "treble-Bb",
+      "treble-F",
+      "treble-C",
+      "treble-G",
+      "treble-D",
+      "treble-A",
+      "treble-E",
+      "treble-B",
+      "treble-Fs",
+      "treble-Cs"
+    ],
+    "items": [
+      "treble-Eb",
+      "treble-G",
+      "treble-Fs",
+      "treble-Bb",
+      "treble-D",
+      "treble-Ab",
+      "treble-C",
+      "treble-B",
+      "treble-F",
+      "treble-Cs",
+      "treble-Gb",
+      "treble-A",
+      "treble-Cb",
+      "treble-E",
+      "treble-Db"
+    ]
+  }
+}

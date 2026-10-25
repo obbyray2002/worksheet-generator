@@ -1,0 +1,45 @@
+{
+  "format": "key-signature-minute",
+  "version": 1,
+  "quiz": {
+    "title": "Key Signature Mad Minute",
+    "instructions": "Name each major key signature.",
+    "timeLimit": "1 minute",
+    "preset": "all",
+    "count": 15,
+    "keys": [
+      "treble-Cb",
+      "treble-Gb",
+      "treble-Db",
+      "treble-Ab",
+      "treble-Eb",
+      "treble-Bb",
+      "treble-F",
+      "treble-C",
+      "treble-G",
+      "treble-D",
+      "treble-A",
+      "treble-E",
+      "treble-B",
+      "treble-Fs",
+      "treble-Cs"
+    ],
+    "items": [
+      "treble-Db",
+      "treble-A",
+      "treble-E",
+      "treble-Cb",
+      "treble-B",
+      "treble-F",
+      "treble-Fs",
+      "treble-G",
+      "treble-Ab",
+      "treble-Gb",
+      "treble-Eb",
+      "treble-C",
+      "treble-Cs",
+      "treble-Bb",
+      "treble-D"
+    ]
+  }
+}

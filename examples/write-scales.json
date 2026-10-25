@@ -1,0 +1,45 @@
+{
+  "format": "write-scale",
+  "version": 1,
+  "quiz": {
+    "title": "Write the Major Scale",
+    "instructions": "Write each major scale.",
+    "timeLimit": "7 ½ minutes",
+    "preset": "all",
+    "count": 15,
+    "keys": [
+      "treble-Cb",
+      "treble-Gb",
+      "treble-Db",
+      "treble-Ab",
+      "treble-Eb",
+      "treble-Bb",
+      "treble-F",
+      "treble-C",
+      "treble-G",
+      "treble-D",
+      "treble-A",
+      "treble-E",
+      "treble-B",
+      "treble-Fs",
+      "treble-Cs"
+    ],
+    "items": [
+      "treble-D",
+      "treble-Ab",
+      "treble-E",
+      "treble-F",
+      "treble-B",
+      "treble-Gb",
+      "treble-C",
+      "treble-Fs",
+      "treble-Eb",
+      "treble-A",
+      "treble-Cb",
+      "treble-G",
+      "treble-Db",
+      "treble-Cs",
+      "treble-Bb"
+    ]
+  }
+}

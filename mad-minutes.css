@@ -1,0 +1,171 @@
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.checks label,
+.inline-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checks label:has(input:checked),
+.inline-check:has(input:checked) {
+  border-color: var(--accent);
+  background: #eef6f3;
+}
+
+.option-set {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.option-set legend {
+  font-weight: 650;
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.pool-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.inline-check {
+  margin-top: 4px;
+  width: fit-content;
+  border-radius: 8px;
+}
+
+.minute-sheet {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.minute-head {
+  display: grid;
+  grid-template-columns: 1fr 230px;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 8px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  line-height: 1.35;
+  flex: 0 0 auto;
+}
+
+.minute-head .title {
+  font-weight: 700;
+}
+
+.minute-meta {
+  text-align: left;
+}
+
+.note-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 4px 6px;
+}
+
+.note-grid.cols-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  align-content: start;
+  gap: 10px 12px;
+}
+
+.note-grid.cols-5 .note-card img {
+  flex: none;
+  height: auto;
+}
+
+body[data-print="student"] .write-card .staff-answer,
+body[data-print="key"] .write-card .staff-blank {
+  display: none;
+}
+
+.write-card .prompt {
+  flex: 0 0 auto;
+  text-align: center;
+  font-family: "Times New Roman", Times, Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 6px 4px 2px;
+}
+
+.note-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid #cfcfcf;
+  background: #fff;
+  overflow: hidden;
+}
+
+.note-card img {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.note-card .caption {
+  flex: 0 0 20px;
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13px;
+  line-height: 20px;
+  border-top: 1px solid #bbb;
+}
+
+body[data-print="student"] .note-card .caption {
+  color: transparent;
+}
+
+.empty-preview {
+  font-family: "Courier New", Courier, monospace;
+  color: #666;
+}
+
+.paper {
+  width: 11in;
+  height: 8.5in;
+  zoom: 0.7;
+}
+
+@page {
+  size: letter landscape;
+  margin: 0.45in;
+}
+
+@media print {
+  .paper {
+    width: auto;
+    height: auto;
+    padding: 0;
+    zoom: 1;
+  }
+
+  .minute-sheet {
+    height: 7.6in;
+  }
+}

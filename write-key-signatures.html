@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Write Key Signatures</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="mad-minutes.css" />
+  <link rel="stylesheet" href="write-key-signatures.css" />
+  <script src="embed.js"></script>
+</head>
+<body class="task-write" data-print="student">
+  <header class="app-bar no-print">
+    <div class="brand">
+      <strong>Write Key Signatures</strong>
+      <nav class="app-switch">
+        <a href="index.html">Box worksheets</a>
+        <a href="mad-minutes.html">Mad Minutes</a>
+        <a href="key-signatures.html">Key signatures</a>
+        <a href="write-key-signatures.html" class="current">Write signatures</a>
+        <a href="write-tetrachords.html">Write tetrachords</a>
+        <a href="write-scales.html">Write scales</a>
+      </nav>
+      <span id="file-status" class="file-status">untitled.json</span>
+    </div>
+    <div class="toolbar">
+      <button type="button" id="btn-new" title="New quiz">New</button>
+      <button type="button" id="btn-open" title="Open a saved quiz file">Open</button>
+      <button type="button" id="btn-save" title="Save (Ctrl/Cmd+S)">Save</button>
+      <button type="button" id="btn-save-as" title="Save a copy">Save As</button>
+      <span class="toolbar-gap"></span>
+      <button type="button" id="btn-randomize" class="primary" title="Draw a new random set from the current options">Randomize</button>
+      <button type="button" id="btn-undo" title="Undo the last shuffle" disabled>Undo shuffle</button>
+      <span class="toolbar-gap"></span>
+      <button type="button" id="btn-print" title="Print the student worksheet">Print worksheet</button>
+      <button type="button" id="btn-print-key" title="Print the answer key">Print key</button>
+      <button type="button" id="btn-help" class="ghost" title="How to use this">Help</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="editor no-print" aria-label="Quiz options">
+      <div class="field-grid">
+        <label for="field-title">Title</label>
+        <input id="field-title" type="text" placeholder="Write the Key Signature" autocomplete="off" />
+
+        <label for="field-instructions">Instructions</label>
+        <input id="field-instructions" type="text" placeholder="Write each major key signature." autocomplete="off" />
+
+        <label for="field-time">Time limit</label>
+        <input id="field-time" type="text" placeholder="5 minutes — leave blank if none" autocomplete="off" />
+
+        <label for="field-preset">Preset</label>
+        <select id="field-preset">
+          <option value="all">All 15 keys</option>
+          <option value="flats">Flats (C♭–F)</option>
+          <option value="sharps">Sharps (G–C♯)</option>
+          <option value="common">4 flats to 4 sharps (A♭–E)</option>
+          <option value="beginner">Beginner (F, C, G, D)</option>
+          <option value="custom">Custom</option>
+        </select>
+
+        <label for="field-count">Signatures on the page</label>
+        <input id="field-count" type="number" min="5" max="60" value="15" />
+      </div>
+
+      <p id="pool-status" class="pool-status"></p>
+
+      <fieldset class="option-set">
+        <legend>Keys to include</legend>
+        <div class="checks" id="keys"></div>
+      </fieldset>
+    </section>
+
+    <section class="preview-pane" aria-label="Print preview">
+      <div class="preview-tabs no-print">
+        <button type="button" class="tab active" data-mode="student">Student worksheet</button>
+        <button type="button" class="tab" data-mode="key">Answer key</button>
+        <span class="preview-hint">This is the printed page. Use Chrome: Letter, Portrait, headers off.</span>
+      </div>
+      <div class="paper-scroll">
+        <div class="paper" id="paper">
+          <div class="minute-sheet" id="sheet"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <input id="file-input" class="hidden" type="file" accept=".json,application/json" />
+
+  <dialog id="help-dialog" class="no-print">
+    <div class="dialog-head">
+      <h2>How to use</h2>
+      <button type="button" id="btn-help-close" class="ghost">Close</button>
+    </div>
+    <div class="dialog-body">
+      <ol>
+        <li>Pick a preset, or tick the major keys you want.</li>
+        <li>Set how many signatures belong on the page. 15 fills one portrait sheet (two columns) if the pool is large enough; a higher number will repeat and the staves will shrink.</li>
+        <li><strong>Randomize</strong> draws a new set from those options.</li>
+        <li><strong>Save</strong> the quiz as a <code>.json</code> file next to the lesson if you want that exact mix again.</li>
+        <li>Print from Chrome: Letter, Portrait, headers off, 100%.</li>
+      </ol>
+      <p>Each box names the key with the proper accidental (E♭, F♯, C♭) and shows a blank treble staff. Students write the signature on the staff. The answer key swaps in the completed signature.</p>
+    </div>
+  </dialog>
+
+  <script src="quiz-formats.js"></script>
+  <script src="keys-catalog.js"></script>
+  <script src="write-key-signatures.js"></script>
+</body>
+</html>

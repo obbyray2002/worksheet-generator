@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Worksheet Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    html, body.shell { height: 100%; margin: 0; }
+    body.shell { display: flex; flex-direction: column; overflow: hidden; background: #1c262d; }
+    .shell-bar { flex: 0 0 auto; }
+    #workspace { flex: 1 1 auto; min-height: 0; width: 100%; height: calc(100vh - 52px); border: 0; background: #e7ecef; }
+  </style>
+</head>
+<body class="shell">
+  <header class="shell-bar no-print">
+    <strong>Worksheet Generator</strong>
+    <label class="kind-picker">
+      Worksheet
+      <select id="kind">
+        <option value="notes">Identify notes (4 clefs)</option>
+        <option value="keys">Identify key signatures</option>
+        <option value="write-keys">Write key signatures</option>
+        <option value="write-tetrachords">Write major tetrachords</option>
+        <option value="write-scales">Write major scales</option>
+        <option value="box">Write in boxes (letter names)</option>
+      </select>
+    </label>
+    <button type="button" id="btn-share" class="ghost">Share / Weebly</button>
+  </header>
+  <iframe id="workspace" title="Worksheet editor"></iframe>
+
+  <dialog id="share-dialog" class="no-print">
+    <div class="dialog-head">
+      <h2>Share with other teachers</h2>
+      <button type="button" id="btn-share-close" class="ghost">Close</button>
+    </div>
+    <div class="dialog-body">
+      <p>This is one static website: HTML, photos, and your saved <code>.json</code> quizzes. Weebly cannot host the photo folder by itself, so publish the whole <strong>Worksheet Generator</strong> folder somewhere that serves files (GitHub Pages, Netlify, or a school server), then embed that address on Weebly.</p>
+      <ol>
+        <li>Upload this entire folder (do not skip the <code>notes</code> and <code>keys</code> photo folders).</li>
+        <li>Confirm you can open <code>index.html</code> on that host in a browser.</li>
+        <li>On Weebly, add an <strong>Embed Code</strong> block and paste:</li>
+      </ol>
+      <textarea readonly rows="4">&lt;iframe src="https://obbyray2002.github.io/worksheet-generator/" style="width:100%;height:90vh;border:0;" title="Worksheet Generator"&gt;&lt;/iframe&gt;</textarea>
+      <p>Teachers then pick a worksheet type from the menu, click <strong>Randomize</strong>, and print from Chrome: Letter, headers off, 100%. Identify-notes pages print landscape; the others print portrait.</p>
+    </div>
+  </dialog>
+
+  <script src="shell.js"></script>
+</body>
+</html>

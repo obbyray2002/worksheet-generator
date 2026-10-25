@@ -1,0 +1,193 @@
+{
+  "format": "box-worksheet",
+  "version": 1,
+  "quiz": {
+    "title": "Major Scales - Version 1",
+    "instructions": "Write the specified major scale using accidentals.  ",
+    "timeLimit": "",
+    "copiesPerPage": 4,
+    "columns": 8,
+    "items": [
+      {
+        "prompt": "C♯",
+        "answers": [
+          "D♯",
+          "E♯",
+          "F♯",
+          "G♯",
+          "A♯",
+          "B♯",
+          "C♯"
+        ]
+      },
+      {
+        "prompt": "F♯",
+        "answers": [
+          "G♯",
+          "A♯",
+          "B",
+          "C♯",
+          "D♯",
+          "E♯",
+          "F♯"
+        ]
+      },
+      {
+        "prompt": "B",
+        "answers": [
+          "C♯",
+          "D♯",
+          "E",
+          "F♯",
+          "G♯",
+          "A♯",
+          "B♯"
+        ]
+      },
+      {
+        "prompt": "E",
+        "answers": [
+          "F♯",
+          "G♯",
+          "A",
+          "B",
+          "C♯",
+          "D♯",
+          "E"
+        ]
+      },
+      {
+        "prompt": "A",
+        "answers": [
+          "B",
+          "C♯",
+          "D",
+          "E",
+          "F♯",
+          "G♯",
+          "A"
+        ]
+      },
+      {
+        "prompt": "D",
+        "answers": [
+          "E",
+          "F♯",
+          "G",
+          "A",
+          "B",
+          "C♯",
+          "D"
+        ]
+      },
+      {
+        "prompt": "G",
+        "answers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F♯",
+          "G"
+        ]
+      },
+      {
+        "prompt": "C",
+        "answers": [
+          "D",
+          "E",
+          "F",
+          "G",
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "prompt": "F",
+        "answers": [
+          "G",
+          "A",
+          "B♭",
+          "C",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      {
+        "prompt": "B♭",
+        "answers": [
+          "C",
+          "D",
+          "E♭",
+          "F",
+          "G",
+          "A",
+          "B♭"
+        ]
+      },
+      {
+        "prompt": "E♭",
+        "answers": [
+          "F",
+          "G",
+          "A♭",
+          "B♭",
+          "C",
+          "D",
+          "E♭"
+        ]
+      },
+      {
+        "prompt": "A♭",
+        "answers": [
+          "B♭",
+          "C",
+          "D♭",
+          "E♭",
+          "F",
+          "G",
+          "A♭"
+        ]
+      },
+      {
+        "prompt": "D♭",
+        "answers": [
+          "E♭",
+          "F",
+          "G♭",
+          "A♭",
+          "B♭",
+          "C",
+          "D♭"
+        ]
+      },
+      {
+        "prompt": "G♭",
+        "answers": [
+          "A♭",
+          "B♭",
+          "C♭",
+          "D♭",
+          "E♭",
+          "F",
+          "G♭"
+        ]
+      },
+      {
+        "prompt": "C♭",
+        "answers": [
+          "D♭",
+          "E♭",
+          "F♭",
+          "G♭",
+          "A♭",
+          "B♭",
+          "C♭"
+        ]
+      }
+    ]
+  }
+}
