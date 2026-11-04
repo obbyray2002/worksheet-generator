@@ -31,6 +31,7 @@
   const task = TASKS[document.body.dataset.task] || TASKS.tetrachord;
   const STORAGE_KEY = task.storage;
   const BLANK_SRC = "keys/treble/Blank.png";
+  const TAIL_SRC = "keys/treble/staff-tail.png";
   const ACCEPT = {
     types: [{ description: "Quiz file", accept: { "application/json": [".json"] } }],
   };
@@ -298,6 +299,7 @@
           <div class="prompt">${name}</div>
           <div class="staff-wrap">
             <img class="staff-full" src="${BLANK_SRC}" alt="Blank treble staff for ${name}" />
+            <img class="staff-extend" src="${TAIL_SRC}" alt="" />
           </div>
           <figcaption class="caption">${spelling}</figcaption>
         </figure>`;

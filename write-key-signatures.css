@@ -56,13 +56,14 @@ body.task-scale .write-grid {
   grid-auto-rows: auto;
   align-content: start;
   align-items: start;
-  gap: 5px 12px;
+  gap: 4px 10px;
   width: 100%;
 }
 
 body.task-scale .minute-head {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   font-size: 12px;
+  grid-template-columns: 1fr 170px;
 }
 
 body.task-tetrachord .write-card,
@@ -83,27 +84,43 @@ body.task-scale .write-card .prompt {
   font-size: 16px;
 }
 
+body.task-tetrachord { --staff-h: 0.78in; }
+body.task-scale { --staff-h: 0.82in; }
+
 body.task-tetrachord .write-card .staff-wrap,
 body.task-scale .write-card .staff-wrap {
+  display: grid;
+  grid-template-columns: auto minmax(0.95in, 1fr);
+  align-items: stretch;
+  column-gap: 0;
   min-width: 0;
 }
 
-body.task-tetrachord .write-card img,
+body.task-tetrachord .write-card img.staff-full,
 body.task-scale .write-card img.staff-full {
   display: block;
   width: auto;
-  height: 0.82in;
-  max-width: 100%;
+  height: var(--staff-h);
+  max-width: none;
   max-height: none;
   min-width: 0;
   flex: none;
   aspect-ratio: 267 / 88;
-  object-fit: contain;
+  object-fit: fill;
   object-position: left center;
 }
 
-body.task-tetrachord .write-card img {
-  height: 0.78in;
+body.task-tetrachord .write-card img.staff-extend,
+body.task-scale .write-card img.staff-extend {
+  display: block;
+  width: 100%;
+  height: var(--staff-h);
+  min-width: 0.95in;
+  max-width: none;
+  margin-left: -1px;
+  flex: none;
+  object-fit: fill;
+  object-position: left center;
 }
 
 body.task-tetrachord .write-card .caption,
@@ -168,15 +185,18 @@ body[data-print="student"] .write-card .caption {
     height: auto;
   }
 
-  body.task-tetrachord .write-card img,
+  body.task-tetrachord .write-card img.staff-full,
   body.task-scale .write-card img.staff-full {
     width: auto;
-    height: 0.82in;
-    max-width: 100%;
+    height: var(--staff-h);
+    max-width: none;
     aspect-ratio: 267 / 88;
   }
 
-  body.task-tetrachord .write-card img {
-    height: 0.78in;
+  body.task-tetrachord .write-card img.staff-extend,
+  body.task-scale .write-card img.staff-extend {
+    width: 100%;
+    min-width: 0.95in;
+    height: var(--staff-h);
   }
 }
