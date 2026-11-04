@@ -6,7 +6,7 @@
   <title>Write Intervals</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="mad-minutes.css" />
-  <link rel="stylesheet" href="write-intervals.css" />
+  <link rel="stylesheet" href="write-intervals.css?v=2" />
   <script src="embed.js"></script>
 </head>
 <body class="task-write task-intervals" data-print="student">
@@ -61,8 +61,22 @@
           <option value="custom">Custom</option>
         </select>
 
-        <label for="field-count">Questions on the page</label>
-        <input id="field-count" type="number" min="10" max="80" value="50" />
+        <label for="field-count">Questions per quiz</label>
+        <input id="field-count" type="number" min="8" max="80" value="50" />
+
+        <label for="field-font">Font size</label>
+        <select id="field-font">
+          <option value="normal">Normal</option>
+          <option value="large">Large</option>
+          <option value="xlarge">Extra large</option>
+        </select>
+
+        <label for="field-copies">Copies per page</label>
+        <select id="field-copies">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="4">4</option>
+        </select>
       </div>
 
       <p id="pool-status" class="pool-status"></p>
@@ -98,7 +112,8 @@
     <div class="dialog-body">
       <ol>
         <li>Pick a preset, or tick the starting pitches you want. C♭ is included.</li>
-        <li>Set how many questions belong on the page. 50 matches the original two-column sheet.</li>
+        <li>Set how many questions belong on each quiz. 50 fills one portrait sheet at normal type.</li>
+        <li>Use <strong>Font size</strong> if the type should be bigger, and <strong>Copies per page</strong> to print the same quiz two or four times on one sheet (cut apart). With 2 or 4 copies, drop the question count so they still fit.</li>
         <li><strong>Randomize</strong> draws a new set. The mix stays weighted toward major/perfect and minor/diminished, with fewer augmented intervals.</li>
         <li><strong>Save</strong> the quiz as a <code>.json</code> file if you want that exact mix again.</li>
         <li>Print from Chrome: Letter, Portrait, headers off, 100%.</li>
@@ -109,6 +124,6 @@
 
   <script src="quiz-formats.js"></script>
   <script src="intervals-catalog.js"></script>
-  <script src="write-intervals.js"></script>
+  <script src="write-intervals.js?v=2"></script>
 </body>
 </html>

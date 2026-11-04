@@ -35,6 +35,8 @@
     time: document.getElementById("field-time"),
     preset: document.getElementById("field-preset"),
     count: document.getElementById("field-count"),
+    font: document.getElementById("field-font"),
+    copies: document.getElementById("field-copies"),
     pool: document.getElementById("pool-status"),
     sheet: document.getElementById("sheet"),
     fileStatus: document.getElementById("file-status"),
@@ -51,6 +53,8 @@
       timeLimit: "10 minutes",
       preset: "all",
       count: 50,
+      fontSize: "normal",
+      copiesPerPage: 1,
       keys: ALL_IDS.slice(),
       items: [],
     };
@@ -81,12 +85,16 @@
     const base = defaultQuiz();
     const keys = Array.isArray(src.keys) ? src.keys.filter((id) => byKey(id)) : base.keys;
     const items = Array.isArray(src.items) ? src.items.map(byItemId).filter(Boolean) : [];
+    const fontSize = ["normal", "large", "xlarge"].includes(src.fontSize) ? src.fontSize : "normal";
+    const copies = [1, 2, 4].includes(Number(src.copiesPerPage)) ? Number(src.copiesPerPage) : 1;
     return {
       title: String(src.title ?? base.title),
       instructions: String(src.instructions ?? base.instructions),
       timeLimit: String(src.timeLimit ?? base.timeLimit),
       preset: PRESETS[src.preset] ? src.preset : "custom",
-      count: clamp(parseInt(src.count, 10) || base.count, 10, 80),
+      count: clamp(parseInt(src.count, 10) || base.count, 8, 80),
+      fontSize,
+      copiesPerPage: copies,
       keys: keys.length ? keys : ALL_IDS.slice(),
       items,
     };
@@ -232,8 +240,10 @@
     state.quiz.title = els.title.value;
     state.quiz.instructions = els.instructions.value;
     state.quiz.timeLimit = els.time.value;
-    state.quiz.count = clamp(parseInt(els.count.value, 10) || 50, 10, 80);
+    state.quiz.count = clamp(parseInt(els.count.value, 10) || 50, 8, 80);
     els.count.value = String(state.quiz.count);
+    state.quiz.fontSize = ["normal", "large", "xlarge"].includes(els.font.value) ? els.font.value : "normal";
+    state.quiz.copiesPerPage = [1, 2, 4].includes(Number(els.copies.value)) ? Number(els.copies.value) : 1;
     state.quiz.keys = checkedValues("key");
     if (!state.applyingPreset) {
       const current = state.quiz.keys.slice().sort().join(",");
@@ -251,6 +261,8 @@
     els.instructions.value = state.quiz.instructions;
     els.time.value = state.quiz.timeLimit;
     els.count.value = String(state.quiz.count);
+    els.font.value = state.quiz.fontSize;
+    els.copies.value = String(state.quiz.copiesPerPage);
     els.preset.value = PRESETS[state.quiz.preset] ? state.quiz.preset : "custom";
     setChecked("key", state.quiz.keys);
     state.applyingPreset = false;
@@ -276,12 +288,15 @@
 
   function renderPreview() {
     const isKey = state.previewMode === "key";
+    const copies = state.quiz.copiesPerPage;
     document.body.dataset.print = isKey ? "key" : "student";
-    document.body.classList.toggle("count-compact", state.quiz.items.length > 56);
+    document.body.dataset.font = state.quiz.fontSize;
+    document.body.dataset.copies = String(copies);
     const available = pool();
     const unique = new Set(state.quiz.items.map((item) => item.id)).size;
+    const copyNote = copies > 1 ? ` · ${copies} copies on the sheet` : "";
     els.pool.textContent = available.length
-      ? `Pool: ${available.length} unique questions from ${state.quiz.keys.length} keys. ${mixLabel(state.quiz.items)}${
+      ? `Pool: ${available.length} unique questions from ${state.quiz.keys.length} keys. ${mixLabel(state.quiz.items)}${copyNote}${
           unique < state.quiz.items.length ? " · some questions repeat" : ""
         }`
       : "Pool: 0 questions — turn some starting pitches back on.";
@@ -306,8 +321,10 @@
         </div>
       </div>`;
 
+    els.sheet.className = `minute-sheet interval-sheet copies-${copies}`;
+
     if (!total) {
-      els.sheet.innerHTML = `${heading}<p class="empty-preview">Nothing to show.</p>`;
+      els.sheet.innerHTML = `<article class="interval-copy">${heading}<p class="empty-preview">Nothing to show.</p></article>`;
       return;
     }
 
@@ -324,7 +341,10 @@
       })
       .join("");
 
-    els.sheet.innerHTML = `${heading}<div class="interval-list" style="--interval-rows: ${rows}">${items}</div>`;
+    const copyHTML = `${heading}<div class="interval-list" style="--interval-rows: ${rows}">${items}</div>`;
+    els.sheet.innerHTML = Array.from({ length: copies }, () => `<article class="interval-copy">${copyHTML}</article>`).join(
+      ""
+    );
   }
 
   function confirmIfDirty(message) {
@@ -441,6 +461,13 @@
     els.count.addEventListener("change", () => {
       readFiltersFromUI();
       randomize(false);
+    });
+    ["font", "copies"].forEach((key) => {
+      els[key].addEventListener("change", () => {
+        readFiltersFromUI();
+        renderPreview();
+        markDirty();
+      });
     });
     els.preset.addEventListener("change", () => {
       if (els.preset.value === "custom") {

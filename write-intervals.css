@@ -1,3 +1,21 @@
+.task-intervals {
+  --interval-size: 12.5px;
+  --interval-head: 13px;
+  --interval-lead: 1.48;
+}
+
+.task-intervals[data-font="large"] {
+  --interval-size: 15px;
+  --interval-head: 14px;
+  --interval-lead: 1.45;
+}
+
+.task-intervals[data-font="xlarge"] {
+  --interval-size: 18px;
+  --interval-head: 15px;
+  --interval-lead: 1.42;
+}
+
 .task-intervals .paper {
   width: 8.5in;
   height: 11in;
@@ -6,11 +24,68 @@
   overflow: hidden;
 }
 
+.task-intervals .minute-sheet.interval-sheet {
+  height: 100%;
+  min-height: 0;
+}
+
+.task-intervals .minute-sheet.copies-1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-intervals .minute-sheet.copies-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.18in;
+}
+
+.task-intervals .minute-sheet.copies-4 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.16in 0.2in;
+}
+
+.task-intervals .interval-copy {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.task-intervals .copies-2 .interval-copy:first-child {
+  border-bottom: 1px dashed #888;
+  padding-bottom: 0.08in;
+}
+
+.task-intervals .copies-4 .interval-copy {
+  padding: 0 0.04in 0.04in;
+}
+
 .task-intervals .minute-head {
   grid-template-columns: 1fr 200px;
   gap: 8px;
   margin-bottom: 10px;
-  font-size: 13px;
+  font-size: var(--interval-head);
+}
+
+.task-intervals .copies-2 .minute-head {
+  margin-bottom: 6px;
+}
+
+.task-intervals .copies-4 .minute-head {
+  grid-template-columns: 1fr;
+  gap: 2px;
+  margin-bottom: 4px;
+  font-size: calc(var(--interval-head) * 0.9);
+}
+
+.task-intervals .copies-4 .minute-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 10px;
 }
 
 .task-intervals .mix-note {
@@ -28,14 +103,14 @@
   column-gap: 22px;
   row-gap: 0;
   width: 100%;
+  min-height: 0;
   font-family: "Courier New", Courier, monospace;
-  font-size: 12.5px;
-  line-height: 1.48;
+  font-size: var(--interval-size);
+  line-height: var(--interval-lead);
 }
 
-.task-intervals.count-compact .interval-list {
-  font-size: 11.5px;
-  line-height: 1.38;
+.task-intervals .copies-4 .interval-list {
+  column-gap: 12px;
 }
 
 .task-intervals .interval-item {
@@ -43,7 +118,7 @@
   grid-template-columns: 2.2em minmax(0, 1fr) 2.6em;
   align-items: baseline;
   column-gap: 6px;
-  min-height: 1.48em;
+  min-height: calc(var(--interval-size) * var(--interval-lead));
   white-space: nowrap;
 }
 
@@ -93,15 +168,11 @@ body[data-print="key"] .interval-item {
     overflow: visible;
   }
 
-  .task-intervals .minute-sheet {
+  .task-intervals .minute-sheet.interval-sheet {
+    height: 10.1in;
+  }
+
+  .task-intervals .minute-sheet.copies-1 {
     height: auto;
-  }
-
-  .task-intervals .interval-list {
-    font-size: 12.5px;
-  }
-
-  .task-intervals.count-compact .interval-list {
-    font-size: 11.5px;
   }
 }
