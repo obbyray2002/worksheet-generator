@@ -1,8 +1,9 @@
 .task-write .paper {
   width: 8.5in;
   height: 11in;
-  padding: 0.4in;
+  padding: 0.25in;
   zoom: 0.62;
+  overflow: hidden;
 }
 
 .task-write .minute-head {
@@ -69,13 +70,13 @@ body.task-scale .minute-head {
 body.task-tetrachord .write-card,
 body.task-scale .write-card {
   display: grid;
-  grid-template-columns: 2.5em minmax(0, 1fr);
+  grid-template-columns: 2.1em minmax(0, 1fr);
   align-items: center;
   width: 100%;
   max-width: 100%;
   min-width: 0;
   height: auto;
-  padding: 2px 6px 2px 4px;
+  padding: 2px 4px 2px 2px;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -89,17 +90,15 @@ body.task-scale { --staff-h: 0.82in; }
 
 body.task-tetrachord .write-card .staff-wrap,
 body.task-scale .write-card .staff-wrap {
-  display: grid;
-  grid-template-columns: auto minmax(0.95in, 1fr);
-  align-items: stretch;
-  column-gap: 0;
+  display: block;
   min-width: 0;
+  overflow: visible;
 }
 
 body.task-tetrachord .write-card img.staff-full,
 body.task-scale .write-card img.staff-full {
   display: block;
-  width: auto;
+  width: calc(var(--staff-h) * 267 / 88);
   height: var(--staff-h);
   max-width: none;
   max-height: none;
@@ -110,24 +109,16 @@ body.task-scale .write-card img.staff-full {
   object-position: left center;
 }
 
-body.task-tetrachord .write-card img.staff-extend,
-body.task-scale .write-card img.staff-extend {
-  display: block;
-  width: 100%;
-  height: var(--staff-h);
-  min-width: 0.95in;
-  max-width: none;
-  margin-left: -1px;
-  flex: none;
-  object-fit: fill;
-  object-position: left center;
+body.task-scale .write-card img.staff-full {
+  width: calc(var(--staff-h) * 374 / 88);
+  aspect-ratio: 374 / 88;
 }
 
 body.task-tetrachord .write-card .caption,
 body.task-scale .write-card .caption {
   grid-column: 1 / -1;
   text-align: left;
-  padding: 0 4px 2px 2.6em;
+  padding: 0 4px 2px 2.2em;
   border-top: 0;
   font-family: "Times New Roman", Times, Georgia, serif;
   font-size: 13px;
@@ -142,7 +133,7 @@ body[data-print="student"] .write-card .caption {
 
 @page {
   size: letter portrait;
-  margin: 0.4in;
+  margin: 0.25in;
 }
 
 @media print {
@@ -159,7 +150,7 @@ body[data-print="student"] .write-card .caption {
 
   body.task-tetrachord .paper,
   body.task-scale .paper {
-    width: 7.7in;
+    width: 8in;
     height: auto;
     padding: 0;
     zoom: 1;
@@ -185,18 +176,17 @@ body[data-print="student"] .write-card .caption {
     height: auto;
   }
 
-  body.task-tetrachord .write-card img.staff-full,
-  body.task-scale .write-card img.staff-full {
-    width: auto;
+  body.task-tetrachord .write-card img.staff-full {
+    width: calc(var(--staff-h) * 267 / 88);
     height: var(--staff-h);
     max-width: none;
     aspect-ratio: 267 / 88;
   }
 
-  body.task-tetrachord .write-card img.staff-extend,
-  body.task-scale .write-card img.staff-extend {
-    width: 100%;
-    min-width: 0.95in;
+  body.task-scale .write-card img.staff-full {
+    width: calc(var(--staff-h) * 374 / 88);
     height: var(--staff-h);
+    max-width: none;
+    aspect-ratio: 374 / 88;
   }
 }

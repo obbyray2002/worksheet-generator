@@ -19,7 +19,7 @@
       label: "Write major tetrachords",
     },
     "write-scales": {
-      src: "write-scales.html?embed=1",
+      src: "write-scales.html?embed=1&v=18",
       label: "Write major scales",
     },
     box: {
