@@ -30,8 +30,7 @@
 
   const task = TASKS[document.body.dataset.task] || TASKS.tetrachord;
   const STORAGE_KEY = task.storage;
-  const BLANK_SRC = "keys/treble/staff-head.png";
-  const TAIL_SRC = "keys/treble/staff-tail.png";
+  const BLANK_SRC = "keys/treble/staff-long.png";
   const ACCEPT = {
     types: [{ description: "Quiz file", accept: { "application/json": [".json"] } }],
   };
@@ -291,17 +290,14 @@
 
     const cols = 2;
     const rows = Math.max(1, Math.ceil(total / cols));
-    const long = task.extendStaff ? " staff-field-long" : "";
-    const tail = `<img class="staff-tail" src="${TAIL_SRC}" alt="" />`;
     const cards = state.quiz.items
       .map((item) => {
         const name = escapeHTML(item.display);
         const spelling = escapeHTML(spellingFor(item));
         return `<figure class="note-card write-card">
           <div class="prompt">${name}</div>
-          <div class="staff-field${long}">
-            <img class="staff-head" src="${BLANK_SRC}" alt="Blank treble staff for ${name}" />
-            ${tail}
+          <div class="staff-wrap">
+            <img class="staff-full" src="${BLANK_SRC}" alt="Blank treble staff for ${name}" />
           </div>
           <figcaption class="caption">${spelling}</figcaption>
         </figure>`;

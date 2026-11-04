@@ -47,62 +47,47 @@
   object-position: left center;
 }
 
-.staff-field {
-  display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 0;
-  height: auto;
-  align-self: stretch;
-  align-items: stretch;
-  overflow: hidden;
-}
-
-.staff-field img.staff-head {
-  flex: 0 0 auto;
-  height: 100%;
-  width: auto;
-  max-width: 1.2in;
-  object-fit: contain;
-  object-position: left center;
-}
-
-.staff-field img.staff-tail {
-  flex: 1 1 auto;
-  width: 0;
-  min-width: 0;
-  max-width: none;
-  height: 100%;
-  object-fit: fill;
-  object-position: left center;
-}
-
 .task-tetrachord .write-card,
 .task-scale .write-card {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto;
-  align-items: stretch;
-  flex-wrap: nowrap;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  padding: 3px 6px;
+  overflow: hidden;
 }
 
 .task-tetrachord .write-card .prompt,
 .task-scale .write-card .prompt {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: center;
+  display: table-cell;
+  position: static;
+  width: 2.5em;
+  min-width: 0;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0 4px 0 0;
 }
 
-.task-tetrachord .write-card .staff-field,
-.task-scale .write-card .staff-field {
-  grid-column: 2;
-  grid-row: 1;
+.task-tetrachord .write-card .staff-wrap,
+.task-scale .write-card .staff-wrap {
+  display: table-cell;
+  width: auto;
+  vertical-align: middle;
 }
 
-.task-tetrachord .write-card .caption,
-.task-scale .write-card .caption {
-  grid-column: 1 / -1;
-  grid-row: 2;
+.task-write .write-card img.staff-full {
+  display: block;
+  width: 100%;
+  height: 0.78in;
+  max-width: none;
+  min-width: 0;
+  flex: none;
+  object-fit: fill;
+  object-position: left center;
+}
+
+.task-scale .write-card img.staff-full {
+  height: 0.9in;
 }
 
 .task-scale .write-grid {
@@ -122,6 +107,8 @@
 
 .task-tetrachord .write-card .caption,
 .task-scale .write-card .caption {
+  display: table-caption;
+  caption-side: bottom;
   flex: unset;
   text-align: left;
   padding: 0 4px 2px 2.6em;
@@ -158,11 +145,12 @@ body[data-print="student"] .write-card .caption {
     overflow: visible;
   }
 
-  .staff-field img.staff-tail {
-    min-width: 1.6in;
+  .task-write .write-card img.staff-full {
+    width: 100%;
+    height: 0.78in;
   }
 
-  .staff-field-long img.staff-tail {
-    min-width: 2.3in;
+  .task-scale .write-card img.staff-full {
+    height: 0.9in;
   }
 }
