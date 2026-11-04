@@ -48,61 +48,67 @@
   object-position: left center;
 }
 
-.task-tetrachord .write-card,
-.task-scale .write-card {
-  display: table;
+body.task-tetrachord .write-grid,
+body.task-scale .write-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: none;
+  grid-auto-flow: row;
+  grid-auto-rows: auto;
+  align-content: start;
+  align-items: start;
+  gap: 5px 12px;
+  width: 100%;
+}
+
+body.task-scale .minute-head {
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+body.task-tetrachord .write-card,
+body.task-scale .write-card {
+  display: grid;
+  grid-template-columns: 2.5em minmax(0, 1fr);
+  align-items: center;
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  table-layout: fixed;
-  border-collapse: collapse;
-  padding: 3px 6px 3px 4px;
+  height: auto;
+  padding: 2px 6px 2px 4px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-.task-tetrachord .write-card .prompt,
-.task-scale .write-card .prompt {
-  display: table-cell;
-  position: static;
-  width: 2.5em;
-  min-width: 0;
-  vertical-align: middle;
-  text-align: center;
-  padding: 0 4px 0 0;
-}
-
-.task-scale .write-card .prompt {
+body.task-scale .write-card .prompt {
   font-size: 16px;
 }
 
-.task-tetrachord .write-card .staff-wrap,
-.task-scale .write-card .staff-wrap {
-  display: table-cell;
-  width: auto;
-  vertical-align: middle;
-  padding: 0;
+body.task-tetrachord .write-card .staff-wrap,
+body.task-scale .write-card .staff-wrap {
+  min-width: 0;
 }
 
-.task-write .write-card img.staff-full {
+body.task-tetrachord .write-card img,
+body.task-scale .write-card img.staff-full {
   display: block;
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 0.82in;
   max-width: 100%;
+  max-height: none;
   min-width: 0;
   flex: none;
+  aspect-ratio: 267 / 88;
   object-fit: contain;
   object-position: left center;
 }
 
-.task-scale .write-grid {
-  gap: 6px 12px;
+body.task-tetrachord .write-card img {
+  height: 0.78in;
 }
 
-.task-tetrachord .write-card .caption,
-.task-scale .write-card .caption {
-  display: table-caption;
-  caption-side: bottom;
-  flex: unset;
+body.task-tetrachord .write-card .caption,
+body.task-scale .write-card .caption {
+  grid-column: 1 / -1;
   text-align: left;
   padding: 0 4px 2px 2.6em;
   border-top: 0;
@@ -134,14 +140,43 @@ body[data-print="student"] .write-card .caption {
     height: 10.2in;
   }
 
-  .task-write .write-grid {
-    grid-template-columns: 1fr 1fr;
+  body.task-tetrachord .paper,
+  body.task-scale .paper {
+    width: 7.7in;
+    height: auto;
+    padding: 0;
+    zoom: 1;
+  }
+
+  body.task-tetrachord .minute-sheet,
+  body.task-scale .minute-sheet {
+    height: auto;
+  }
+
+  body.task-tetrachord .write-grid,
+  body.task-scale .write-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-auto-rows: auto;
     width: 100%;
   }
 
-  .task-write .write-card {
+  body.task-tetrachord .write-card,
+  body.task-scale .write-card {
     overflow: visible;
     width: 100%;
+    height: auto;
+  }
+
+  body.task-tetrachord .write-card img,
+  body.task-scale .write-card img.staff-full {
+    width: auto;
+    height: 0.82in;
     max-width: 100%;
+    aspect-ratio: 267 / 88;
+  }
+
+  body.task-tetrachord .write-card img {
+    height: 0.78in;
   }
 }
