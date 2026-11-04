@@ -30,7 +30,7 @@
 
   const task = TASKS[document.body.dataset.task] || TASKS.tetrachord;
   const STORAGE_KEY = task.storage;
-  const BLANK_SRC = "keys/treble/staff-long.png";
+  const BLANK_SRC = "keys/treble/Blank.png";
   const ACCEPT = {
     types: [{ description: "Quiz file", accept: { "application/json": [".json"] } }],
   };
