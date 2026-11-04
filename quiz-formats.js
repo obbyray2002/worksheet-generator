@@ -5,6 +5,7 @@ window.QUIZ_MAKERS = {
   "write-key-signature": { kind: "write-keys", href: "index.html?kind=write-keys", label: "Write key signatures" },
   "write-tetrachord": { kind: "write-tetrachords", href: "index.html?kind=write-tetrachords", label: "Write tetrachords" },
   "write-scale": { kind: "write-scales", href: "index.html?kind=write-scales", label: "Write scales" },
+  "write-interval": { kind: "write-intervals", href: "index.html?kind=write-intervals", label: "Write intervals" },
 };
 
 window.routeQuizFile = function routeQuizFile(expectedFormat, data, fileName) {

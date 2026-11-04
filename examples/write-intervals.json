@@ -1,0 +1,29 @@
+{
+  "format": "write-interval",
+  "version": 1,
+  "quiz": {
+    "title": "Intervals Above",
+    "instructions": "Write the note that is the specified interval ABOVE the given pitch. Use correct accidentals and spell your intervals correctly.",
+    "timeLimit": "10 minutes",
+    "preset": "all",
+    "count": 50,
+    "keys": [
+      "treble-Cb",
+      "treble-Gb",
+      "treble-Db",
+      "treble-Ab",
+      "treble-Eb",
+      "treble-Bb",
+      "treble-F",
+      "treble-C",
+      "treble-G",
+      "treble-D",
+      "treble-A",
+      "treble-E",
+      "treble-B",
+      "treble-Fs",
+      "treble-Cs"
+    ],
+    "items": []
+  }
+}

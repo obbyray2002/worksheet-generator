@@ -22,6 +22,10 @@
       src: "write-scales.html?embed=1&v=18",
       label: "Write major scales",
     },
+    "write-intervals": {
+      src: "write-intervals.html?embed=1",
+      label: "Write intervals above",
+    },
     box: {
       src: "box.html?embed=1",
       label: "Write in boxes (letter names)",

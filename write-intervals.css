@@ -1,0 +1,107 @@
+.task-intervals .paper {
+  width: 8.5in;
+  height: 11in;
+  padding: 0.45in;
+  zoom: 0.62;
+  overflow: hidden;
+}
+
+.task-intervals .minute-head {
+  grid-template-columns: 1fr 200px;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.task-intervals .mix-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.task-intervals .interval-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: repeat(var(--interval-rows, 25), auto);
+  grid-auto-flow: column;
+  column-gap: 22px;
+  row-gap: 0;
+  width: 100%;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12.5px;
+  line-height: 1.48;
+}
+
+.task-intervals.count-compact .interval-list {
+  font-size: 11.5px;
+  line-height: 1.38;
+}
+
+.task-intervals .interval-item {
+  display: grid;
+  grid-template-columns: 2.2em minmax(0, 1fr) 2.6em;
+  align-items: baseline;
+  column-gap: 6px;
+  min-height: 1.48em;
+  white-space: nowrap;
+}
+
+.task-intervals .interval-item .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.task-intervals .interval-item .prompt {
+  min-width: 0;
+}
+
+.task-intervals .interval-item .blank {
+  border-bottom: 1px solid #222;
+  height: 0.95em;
+}
+
+.task-intervals .interval-item .answer {
+  text-align: left;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+body[data-print="student"] .interval-item .answer {
+  display: none;
+}
+
+body[data-print="key"] .interval-item .blank {
+  display: none;
+}
+
+body[data-print="key"] .interval-item {
+  grid-template-columns: 2.2em minmax(0, 1fr) auto;
+}
+
+@page {
+  size: letter portrait;
+  margin: 0.45in;
+}
+
+@media print {
+  .task-intervals .paper {
+    width: auto;
+    height: auto;
+    padding: 0;
+    zoom: 1;
+    overflow: visible;
+  }
+
+  .task-intervals .minute-sheet {
+    height: auto;
+  }
+
+  .task-intervals .interval-list {
+    font-size: 12.5px;
+  }
+
+  .task-intervals.count-compact .interval-list {
+    font-size: 11.5px;
+  }
+}
