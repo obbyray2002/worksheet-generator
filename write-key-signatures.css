@@ -58,7 +58,7 @@
   overflow: hidden;
 }
 
-.staff-field img {
+.staff-field img.staff-head {
   flex: 0 0 auto;
   height: 100%;
   width: auto;
@@ -67,18 +67,42 @@
   object-position: left center;
 }
 
-.staff-tail {
+.staff-field img.staff-tail {
   flex: 1 1 auto;
-  min-width: 12px;
-  background-image: url("keys/treble/staff-tail.png");
-  background-repeat: repeat-x;
-  background-position: left center;
-  background-size: auto 100%;
+  width: 0;
+  min-width: 0;
+  max-width: none;
+  height: 100%;
+  object-fit: fill;
+  object-position: left center;
 }
 
 .task-tetrachord .write-card,
 .task-scale .write-card {
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
+.task-tetrachord .write-card .prompt,
+.task-scale .write-card .prompt {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+}
+
+.task-tetrachord .write-card .staff-field,
+.task-scale .write-card .staff-field {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.task-tetrachord .write-card .caption,
+.task-scale .write-card .caption {
+  grid-column: 1 / -1;
+  grid-row: 2;
 }
 
 .task-scale .write-grid {
@@ -98,7 +122,7 @@
 
 .task-tetrachord .write-card .caption,
 .task-scale .write-card .caption {
-  flex: 1 0 100%;
+  flex: unset;
   text-align: left;
   padding: 0 4px 2px 2.6em;
   border-top: 0;
@@ -128,5 +152,17 @@ body[data-print="student"] .write-card .caption {
 
   .task-write .minute-sheet {
     height: 10.2in;
+  }
+
+  .task-write .write-card {
+    overflow: visible;
+  }
+
+  .staff-field img.staff-tail {
+    min-width: 1.6in;
+  }
+
+  .staff-field-long img.staff-tail {
+    min-width: 2.3in;
   }
 }
