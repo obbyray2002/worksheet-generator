@@ -92,7 +92,7 @@
       instructions: String(src.instructions ?? base.instructions),
       timeLimit: String(src.timeLimit ?? base.timeLimit),
       preset: PRESETS[src.preset] ? src.preset : "custom",
-      count: clamp(parseInt(src.count, 10) || base.count, 8, 80),
+      count: clamp(parseInt(src.count, 10) || base.count, 4, 80),
       fontSize,
       copiesPerPage: copies,
       keys: keys.length ? keys : ALL_IDS.slice(),
@@ -240,7 +240,7 @@
     state.quiz.title = els.title.value;
     state.quiz.instructions = els.instructions.value;
     state.quiz.timeLimit = els.time.value;
-    state.quiz.count = clamp(parseInt(els.count.value, 10) || 50, 8, 80);
+    state.quiz.count = clamp(parseInt(els.count.value, 10) || 50, 4, 80);
     els.count.value = String(state.quiz.count);
     state.quiz.fontSize = ["normal", "large", "xlarge"].includes(els.font.value) ? els.font.value : "normal";
     state.quiz.copiesPerPage = [1, 2, 4].includes(Number(els.copies.value)) ? Number(els.copies.value) : 1;
@@ -294,7 +294,12 @@
     document.body.dataset.copies = String(copies);
     const available = pool();
     const unique = new Set(state.quiz.items.map((item) => item.id)).size;
-    const copyNote = copies > 1 ? ` · ${copies} copies on the sheet` : "";
+    const copyNote =
+      copies === 2
+        ? " · 2 copies on boxed staves (about 10 questions fill a half-sheet)"
+        : copies === 4
+          ? " · 4 copies on boxed staves (about 6 questions fill a quarter-sheet)"
+          : "";
     els.pool.textContent = available.length
       ? `Pool: ${available.length} unique questions from ${state.quiz.keys.length} keys. ${mixLabel(state.quiz.items)}${copyNote}${
           unique < state.quiz.items.length ? " · some questions repeat" : ""
@@ -328,20 +333,38 @@
       return;
     }
 
-    const items = state.quiz.items
-      .map((item, index) => {
-        const prompt = escapeHTML(item.prompt);
-        const answer = escapeHTML(item.answer);
-        return `<div class="interval-item">
+    const useStaff = copies > 1;
+    const items = useStaff
+      ? state.quiz.items
+          .map((item, index) => {
+            const prompt = escapeHTML(item.prompt);
+            const answer = escapeHTML(item.answer);
+            return `<figure class="note-card write-card">
+          <div class="prompt"><span class="num">${index + 1}.</span> ${prompt}</div>
+          <div class="staff-wrap">
+            <img class="staff-full" src="keys/treble/Blank.png" alt="Blank treble staff for ${prompt}" />
+          </div>
+          <figcaption class="caption">${answer}</figcaption>
+        </figure>`;
+          })
+          .join("")
+      : state.quiz.items
+          .map((item, index) => {
+            const prompt = escapeHTML(item.prompt);
+            const answer = escapeHTML(item.answer);
+            return `<div class="interval-item">
           <span class="num">${index + 1}.</span>
           <span class="prompt">${prompt}</span>
           <span class="blank"></span>
           <span class="answer">= ${answer}</span>
         </div>`;
-      })
-      .join("");
+          })
+          .join("");
 
-    const copyHTML = `${heading}<div class="interval-list" style="--interval-rows: ${rows}">${items}</div>`;
+    const body = useStaff
+      ? `<div class="note-grid write-grid interval-grid">${items}</div>`
+      : `<div class="interval-list" style="--interval-rows: ${rows}">${items}</div>`;
+    const copyHTML = `${heading}${body}`;
     els.sheet.innerHTML = Array.from({ length: copies }, () => `<article class="interval-copy">${copyHTML}</article>`).join(
       ""
     );

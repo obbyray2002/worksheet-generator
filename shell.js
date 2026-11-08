@@ -23,7 +23,7 @@
       label: "Write major scales",
     },
     "write-intervals": {
-      src: "write-intervals.html?embed=1&v=2",
+      src: "write-intervals.html?embed=1&v=3",
       label: "Write intervals above",
     },
     box: {

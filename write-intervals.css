@@ -159,6 +159,135 @@ body[data-print="key"] .interval-item {
   margin: 0.45in;
 }
 
+.task-intervals[data-copies="2"] {
+  --staff-h: 0.52in;
+}
+
+.task-intervals[data-copies="2"][data-font="large"] {
+  --staff-h: 0.58in;
+}
+
+.task-intervals[data-copies="2"][data-font="xlarge"] {
+  --staff-h: 0.64in;
+}
+
+.task-intervals[data-copies="4"] {
+  --staff-h: 0.4in;
+}
+
+.task-intervals[data-copies="4"][data-font="large"] {
+  --staff-h: 0.46in;
+}
+
+.task-intervals[data-copies="4"][data-font="xlarge"] {
+  --staff-h: 0.5in;
+}
+
+.task-intervals .copies-4 .interval-copy {
+  border: 1px solid #cfcfcf;
+  padding: 5px 6px 6px;
+}
+
+.task-intervals .interval-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: none;
+  grid-auto-rows: auto;
+  grid-auto-flow: row;
+  align-content: start;
+  align-items: start;
+  gap: 4px 8px;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.task-intervals .copies-4 .interval-grid {
+  gap: 3px 6px;
+}
+
+.task-intervals .write-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  padding: 4px 6px 5px;
+  gap: 2px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.task-intervals .write-card .prompt {
+  position: static;
+  flex: none;
+  min-width: 0;
+  font-family: "Times New Roman", Times, Georgia, serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  padding: 0;
+  writing-mode: horizontal-tb;
+  white-space: normal;
+}
+
+.task-intervals[data-font="large"] .write-card .prompt {
+  font-size: 13px;
+}
+
+.task-intervals[data-font="xlarge"] .write-card .prompt {
+  font-size: 14px;
+}
+
+.task-intervals .copies-4 .write-card .prompt {
+  font-size: 11px;
+}
+
+.task-intervals .write-card .prompt .num {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 400;
+}
+
+.task-intervals .write-card .staff-wrap {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.task-intervals .write-card img.staff-full {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: var(--staff-h);
+  max-height: none;
+  min-width: 0;
+  flex: none;
+  aspect-ratio: 267 / 88;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.task-intervals .write-card .caption {
+  grid-column: 1 / -1;
+  flex: none;
+  height: auto;
+  text-align: left;
+  padding: 0 2px 1px;
+  border-top: 0;
+  font-family: "Times New Roman", Times, Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: #111;
+  line-height: 1.2;
+}
+
+body.task-intervals[data-print="student"] .write-card .caption {
+  display: none;
+}
+
 @media print {
   .task-intervals .paper {
     width: auto;
@@ -174,5 +303,16 @@ body[data-print="key"] .interval-item {
 
   .task-intervals .minute-sheet.copies-1 {
     height: auto;
+  }
+
+  .task-intervals .write-card {
+    overflow: visible;
+  }
+
+  .task-intervals .write-card img.staff-full {
+    width: auto;
+    height: var(--staff-h);
+    max-width: 100%;
+    aspect-ratio: 267 / 88;
   }
 }

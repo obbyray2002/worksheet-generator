@@ -6,7 +6,7 @@
   <title>Write Intervals</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="mad-minutes.css" />
-  <link rel="stylesheet" href="write-intervals.css?v=2" />
+  <link rel="stylesheet" href="write-intervals.css?v=3" />
   <script src="embed.js"></script>
 </head>
 <body class="task-write task-intervals" data-print="student">
@@ -62,7 +62,7 @@
         </select>
 
         <label for="field-count">Questions per quiz</label>
-        <input id="field-count" type="number" min="8" max="80" value="50" />
+        <input id="field-count" type="number" min="4" max="80" value="50" />
 
         <label for="field-font">Font size</label>
         <select id="field-font">
@@ -80,7 +80,7 @@
       </div>
 
       <p id="pool-status" class="pool-status"></p>
-      <p class="mix-note">Each shuffle is about 37% major/perfect, 37% minor/diminished, and 25% augmented. Unisons and doubly diminished intervals stay out of the pool.</p>
+      <p class="mix-note">Each shuffle is about 37% major/perfect, 37% minor/diminished, and 25% augmented. Unisons and doubly diminished intervals stay out of the pool. Two or four copies use boxed staves like the tetrachord and scale pages.</p>
 
       <fieldset class="option-set">
         <legend>Starting pitches</legend>
@@ -113,17 +113,17 @@
       <ol>
         <li>Pick a preset, or tick the starting pitches you want. C♭ is included.</li>
         <li>Set how many questions belong on each quiz. 50 fills one portrait sheet at normal type.</li>
-        <li>Use <strong>Font size</strong> if the type should be bigger, and <strong>Copies per page</strong> to print the same quiz two or four times on one sheet (cut apart). With 2 or 4 copies, drop the question count so they still fit.</li>
+        <li>Use <strong>Font size</strong> if the type should be bigger. <strong>Copies per page</strong> prints the same quiz two or four times on one sheet. 2 and 4 copies use boxed blank staves, like tetrachords and scales, so you can cut the page apart. About 10 questions fill two copies; about 6 fill four copies.</li>
         <li><strong>Randomize</strong> draws a new set. The mix stays weighted toward major/perfect and minor/diminished, with fewer augmented intervals.</li>
         <li><strong>Save</strong> the quiz as a <code>.json</code> file if you want that exact mix again.</li>
         <li>Print from Chrome: Letter, Portrait, headers off, 100%.</li>
       </ol>
-      <p>Students write the correctly spelled note above the given pitch. The answer key fills in those spellings (double sharps as 𝄪, double flats as ♭♭).</p>
+      <p>One copy on a page is a letter-name list. Two or four copies on a page use boxed blank staves, like tetrachords and scales. The answer key spells the note (double sharps as 𝄪, double flats as ♭♭).</p>
     </div>
   </dialog>
 
   <script src="quiz-formats.js"></script>
   <script src="intervals-catalog.js"></script>
-  <script src="write-intervals.js?v=2"></script>
+  <script src="write-intervals.js?v=3"></script>
 </body>
 </html>
