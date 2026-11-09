@@ -7,11 +7,11 @@
       label: "Identify notes (4 clefs)",
     },
     keys: {
-      src: "key-signatures.html?embed=1",
-      label: "Identify key signatures",
+      src: "key-signatures.html?embed=1&v=2",
+      label: "Identify key signatures (4 clefs)",
     },
     "write-keys": {
-      src: "write-key-signatures.html?embed=1",
+      src: "write-key-signatures.html?embed=1&v=2",
       label: "Write key signatures",
     },
     "write-tetrachords": {

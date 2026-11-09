@@ -5,15 +5,18 @@
   const ACCEPT = {
     types: [{ description: "Quiz file", accept: { "application/json": [".json"] } }],
   };
-  const CATALOG = (window.KEY_CATALOG || []).slice().sort((a, b) => a.order - b.order);
-  const ALL_IDS = CATALOG.map((k) => k.id);
+  const CLEFS = window.KEY_CLEFS || ["treble", "alto", "tenor", "bass"];
+  const ClefLabel = { treble: "Treble", alto: "Alto", tenor: "Tenor", bass: "Bass" };
+  const KEY_DEFS = (window.KEY_DEFS || []).slice().sort((a, b) => a.order - b.order);
+  const CATALOG = (window.KEY_CATALOG || []).slice();
+  const ALL_FILES = KEY_DEFS.map((k) => k.file);
 
   const PRESETS = {
-    all: ALL_IDS.slice(),
-    flats: CATALOG.filter((k) => k.side === "flat").map((k) => k.id),
-    sharps: CATALOG.filter((k) => k.side === "sharp").map((k) => k.id),
-    common: CATALOG.filter((k) => k.order >= 4 && k.order <= 12).map((k) => k.id),
-    beginner: CATALOG.filter((k) => ["F", "C", "G", "D"].includes(k.name)).map((k) => k.id),
+    all: ALL_FILES.slice(),
+    flats: KEY_DEFS.filter((k) => k.side === "flat").map((k) => k.file),
+    sharps: KEY_DEFS.filter((k) => k.side === "sharp").map((k) => k.file),
+    common: KEY_DEFS.filter((k) => k.order >= 4 && k.order <= 12).map((k) => k.file),
+    beginner: KEY_DEFS.filter((k) => ["F", "C", "G", "D"].includes(k.name)).map((k) => k.file),
   };
 
   const state = {
@@ -47,7 +50,8 @@
       timeLimit: "1 minute",
       preset: "all",
       count: 15,
-      keys: ALL_IDS.slice(),
+      clefs: ["treble"],
+      keys: ALL_FILES.slice(),
       items: [],
     };
   }
@@ -64,10 +68,22 @@
     return CATALOG.find((k) => k.id === id) || null;
   }
 
+  function toKeyFile(id) {
+    if (!id) return null;
+    const hit = CATALOG.find((k) => k.id === id);
+    if (hit) return hit.file;
+    if (ALL_FILES.includes(id)) return id;
+    const tail = String(id).split("-").pop();
+    return ALL_FILES.includes(tail) ? tail : null;
+  }
+
   function normalizeQuiz(raw) {
     const src = raw && raw.quiz ? raw.quiz : raw || {};
     const base = defaultQuiz();
-    const keys = Array.isArray(src.keys) ? src.keys.filter((id) => byId(id)) : base.keys;
+    const clefs = Array.isArray(src.clefs) ? src.clefs.filter((c) => CLEFS.includes(c)) : base.clefs;
+    const keys = Array.isArray(src.keys)
+      ? [...new Set(src.keys.map(toKeyFile).filter(Boolean))]
+      : base.keys;
     const items = Array.isArray(src.items)
       ? src.items.map((item) => (typeof item === "string" ? byId(item) : byId(item && item.id))).filter(Boolean)
       : [];
@@ -77,14 +93,20 @@
       timeLimit: String(src.timeLimit ?? base.timeLimit),
       preset: PRESETS[src.preset] ? src.preset : "custom",
       count: clamp(parseInt(src.count, 10) || base.count, 5, 60),
-      keys: keys.length ? keys : ALL_IDS.slice(),
+      clefs: clefs.length ? clefs : ["treble"],
+      keys: keys.length ? keys : ALL_FILES.slice(),
       items,
     };
   }
 
   function pool() {
-    const allowed = new Set(state.quiz.keys);
-    return CATALOG.filter((k) => allowed.has(k.id));
+    const clefs = new Set(state.quiz.clefs);
+    const keys = new Set(state.quiz.keys);
+    return CATALOG.filter((k) => clefs.has(k.clef) && keys.has(k.file)).sort((a, b) => {
+      const keyOrder = a.order - b.order;
+      if (keyOrder) return keyOrder;
+      return CLEFS.indexOf(a.clef) - CLEFS.indexOf(b.clef);
+    });
   }
 
   function shuffle(list) {
@@ -191,6 +213,11 @@
     state.quiz.timeLimit = els.time.value;
     state.quiz.count = clamp(parseInt(els.count.value, 10) || 15, 5, 60);
     els.count.value = String(state.quiz.count);
+    state.quiz.clefs = checkedValues("clef");
+    if (!state.quiz.clefs.length) {
+      state.quiz.clefs = ["treble"];
+      setChecked("clef", state.quiz.clefs);
+    }
     state.quiz.keys = checkedValues("key");
     if (!state.applyingPreset) {
       const current = state.quiz.keys.slice().sort().join(",");
@@ -209,6 +236,7 @@
     els.time.value = state.quiz.timeLimit;
     els.count.value = String(state.quiz.count);
     els.preset.value = PRESETS[state.quiz.preset] ? state.quiz.preset : "custom";
+    setChecked("clef", state.quiz.clefs);
     setChecked("key", state.quiz.keys);
     state.applyingPreset = false;
   }
@@ -226,9 +254,10 @@
     document.body.dataset.print = isKey ? "key" : "student";
     const available = pool();
     const repeats = state.quiz.items.length > available.length;
+    const clefBit = state.quiz.clefs.map((c) => ClefLabel[c] || c).join(", ");
     els.pool.textContent = available.length
-      ? `Pool: ${available.length} unique keys${repeats && available.length < state.quiz.count ? " · some keys will repeat" : ""}`
-      : "Pool: 0 keys — turn some keys back on.";
+      ? `Pool: ${available.length} unique signatures (${clefBit})${repeats && available.length < state.quiz.count ? " · some will repeat" : ""}`
+      : "Pool: 0 signatures — turn a clef or some keys back on.";
 
     const title = escapeHTML(state.quiz.title || "Key Signatures");
     const keyMark = isKey ? " — KEY" : "";
@@ -257,7 +286,7 @@
     const cards = state.quiz.items
       .map(
         (item) => `<figure class="note-card">
-          <img src="${escapeHTML(item.src)}" alt="${escapeHTML(item.display)}" />
+          <img src="${escapeHTML(item.src)}?v=clef1" alt="${escapeHTML(item.display)} in ${escapeHTML(item.clef)} clef" />
           <figcaption class="caption">${escapeHTML(item.display)}</figcaption>
         </figure>`
       )
@@ -365,10 +394,13 @@
   }
 
   function bind() {
-    const box = document.getElementById("keys");
-    box.innerHTML = CATALOG.map(
+    document.getElementById("clefs").innerHTML = CLEFS.map(
+      (clef) =>
+        `<label><input type="checkbox" name="clef" value="${clef}" /> ${ClefLabel[clef]}</label>`
+    ).join("");
+    document.getElementById("keys").innerHTML = KEY_DEFS.map(
       (k) =>
-        `<label><input type="checkbox" name="key" value="${k.id}" /> ${escapeHTML(k.display)}</label>`
+        `<label><input type="checkbox" name="key" value="${k.file}" /> ${escapeHTML(k.display)}</label>`
     ).join("");
 
     ["title", "instructions", "time"].forEach((key) => {

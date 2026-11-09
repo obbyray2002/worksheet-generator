@@ -35,7 +35,7 @@
   const ACCEPT = {
     types: [{ description: "Quiz file", accept: { "application/json": [".json"] } }],
   };
-  const CATALOG = (window.KEY_CATALOG || []).slice().sort((a, b) => a.order - b.order);
+  const CATALOG = (window.KEY_CATALOG || []).filter((k) => k.clef === "treble").sort((a, b) => a.order - b.order);
   const ALL_IDS = CATALOG.map((k) => k.id);
 
   const PRESETS = {

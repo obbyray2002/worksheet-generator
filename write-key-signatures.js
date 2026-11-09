@@ -6,7 +6,7 @@
   const ACCEPT = {
     types: [{ description: "Quiz file", accept: { "application/json": [".json"] } }],
   };
-  const CATALOG = (window.KEY_CATALOG || []).slice().sort((a, b) => a.order - b.order);
+  const CATALOG = (window.KEY_CATALOG || []).filter((k) => k.clef === "treble").sort((a, b) => a.order - b.order);
   const ALL_IDS = CATALOG.map((k) => k.id);
 
   const PRESETS = {
@@ -263,7 +263,7 @@
         return `<figure class="note-card write-card">
           <div class="prompt">${name}</div>
           <img class="staff-blank" src="${BLANK_SRC}" alt="Blank treble staff for ${name}" />
-          <img class="staff-answer" src="${escapeHTML(item.src)}" alt="${name}" />
+          <img class="staff-answer" src="${escapeHTML(item.src)}?v=clef1" alt="${name}" />
         </figure>`;
       })
       .join("");

@@ -67,6 +67,11 @@
       <p id="pool-status" class="pool-status"></p>
 
       <fieldset class="option-set">
+        <legend>Clefs</legend>
+        <div class="checks" id="clefs"></div>
+      </fieldset>
+
+      <fieldset class="option-set">
         <legend>Keys to include</legend>
         <div class="checks" id="keys"></div>
       </fieldset>
@@ -96,17 +101,18 @@
     <div class="dialog-body">
       <ol>
         <li>Pick a preset, or tick the major keys you want.</li>
+        <li>Tick the clefs to include: treble, alto, tenor, and/or bass.</li>
         <li>Set how many signatures belong on the page. 15 uses each chosen key once if the pool is large enough; a higher number will repeat.</li>
         <li><strong>Randomize</strong> draws a new set from those options.</li>
         <li><strong>Save</strong> the quiz as a <code>.json</code> file next to the lesson if you want that exact mix again.</li>
         <li>Print from Chrome: Letter, Landscape, headers off, 100%.</li>
       </ol>
-      <p>This first set is treble-clef major keys, C♭ through C♯. Students write the key name under each staff (E♭, G, F♯, and so on).</p>
+      <p>Major keys, C♭ through C♯, in treble, alto, tenor, and bass. Students write the key name under each staff (E♭, G, F♯, and so on).</p>
     </div>
   </dialog>
 
   <script src="quiz-formats.js"></script>
-  <script src="keys-catalog.js"></script>
-  <script src="key-signatures.js"></script>
+  <script src="keys-catalog.js?v=2"></script>
+  <script src="key-signatures.js?v=2"></script>
 </body>
 </html>
