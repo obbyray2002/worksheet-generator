@@ -11,12 +11,14 @@
   const CATALOG = (window.KEY_CATALOG || []).slice();
   const ALL_FILES = KEY_DEFS.map((k) => k.file);
 
+  const PREFERRED_EXTRAS = ["treble", "bass"];
   const PRESETS = {
-    all: ALL_FILES.slice(),
-    flats: KEY_DEFS.filter((k) => k.side === "flat").map((k) => k.file),
-    sharps: KEY_DEFS.filter((k) => k.side === "sharp").map((k) => k.file),
-    common: KEY_DEFS.filter((k) => k.order >= 4 && k.order <= 12).map((k) => k.file),
-    beginner: KEY_DEFS.filter((k) => ["F", "C", "G", "D"].includes(k.name)).map((k) => k.file),
+    all: { keys: ALL_FILES.slice() },
+    flats: { keys: KEY_DEFS.filter((k) => k.side === "flat").map((k) => k.file) },
+    sharps: { keys: KEY_DEFS.filter((k) => k.side === "sharp").map((k) => k.file) },
+    common: { keys: KEY_DEFS.filter((k) => k.order >= 4 && k.order <= 12).map((k) => k.file) },
+    beginner: { keys: KEY_DEFS.filter((k) => ["F", "C", "G", "D"].includes(k.name)).map((k) => k.file) },
+    "split-4clefs": { keys: ALL_FILES.slice(), clefs: CLEFS.slice(), eachKey: 1 },
   };
 
   const state = {
@@ -34,6 +36,7 @@
     instructions: document.getElementById("field-instructions"),
     time: document.getElementById("field-time"),
     preset: document.getElementById("field-preset"),
+    eachKey: document.getElementById("field-each"),
     count: document.getElementById("field-count"),
     pool: document.getElementById("pool-status"),
     sheet: document.getElementById("sheet"),
@@ -49,11 +52,40 @@
       instructions: "Name each major key signature.",
       timeLimit: "1 minute",
       preset: "all",
+      eachKey: 1,
       count: 15,
       clefs: ["treble"],
+      clefCounts: { treble: 15, alto: 0, tenor: 0, bass: 0 },
       keys: ALL_FILES.slice(),
       items: [],
     };
+  }
+
+  function emptyClefCounts() {
+    return { treble: 0, alto: 0, tenor: 0, bass: 0 };
+  }
+
+  function sumClefCounts(counts) {
+    return CLEFS.reduce((n, c) => n + (counts[c] || 0), 0);
+  }
+
+  function distributeClefCounts(total, selected) {
+    const counts = emptyClefCounts();
+    const active = CLEFS.filter((c) => selected.includes(c));
+    if (!active.length || total < 1) return counts;
+    const n = active.length;
+    const base = Math.floor(total / n);
+    let extra = total % n;
+    for (const c of active) counts[c] = base;
+    const extrasFor = PREFERRED_EXTRAS.filter((c) => active.includes(c));
+    const cycle = extrasFor.length ? extrasFor : active;
+    let i = 0;
+    while (extra > 0) {
+      counts[cycle[i % cycle.length]] += 1;
+      extra -= 1;
+      i += 1;
+    }
+    return counts;
   }
 
   function clone(value) {
@@ -80,10 +112,26 @@
   function normalizeQuiz(raw) {
     const src = raw && raw.quiz ? raw.quiz : raw || {};
     const base = defaultQuiz();
-    const clefs = Array.isArray(src.clefs) ? src.clefs.filter((c) => CLEFS.includes(c)) : base.clefs;
     const keys = Array.isArray(src.keys)
       ? [...new Set(src.keys.map(toKeyFile).filter(Boolean))]
       : base.keys;
+    const eachKey = clamp(parseInt(src.eachKey, 10) || base.eachKey, 1, 8);
+    let clefs = Array.isArray(src.clefs) ? src.clefs.filter((c) => CLEFS.includes(c)) : base.clefs.slice();
+    const rawCounts = src.clefCounts && typeof src.clefCounts === "object" ? src.clefCounts : null;
+    let clefCounts = emptyClefCounts();
+    if (rawCounts) {
+      CLEFS.forEach((c) => {
+        clefCounts[c] = clamp(parseInt(rawCounts[c], 10) || 0, 0, 60);
+      });
+      const fromCounts = CLEFS.filter((c) => clefCounts[c] > 0);
+      if (fromCounts.length) clefs = fromCounts;
+    }
+    if (!clefs.length) clefs = ["treble"];
+    let count = clamp(parseInt(src.count, 10) || keys.length * eachKey || base.count, 1, 60);
+    if (!rawCounts) clefCounts = distributeClefCounts(count, clefs);
+    const summed = sumClefCounts(clefCounts);
+    if (summed > 0) count = clamp(summed, 1, 60);
+    else clefCounts = distributeClefCounts(count, clefs);
     const items = Array.isArray(src.items)
       ? src.items.map((item) => (typeof item === "string" ? byId(item) : byId(item && item.id))).filter(Boolean)
       : [];
@@ -92,21 +140,17 @@
       instructions: String(src.instructions ?? base.instructions),
       timeLimit: String(src.timeLimit ?? base.timeLimit),
       preset: PRESETS[src.preset] ? src.preset : "custom",
-      count: clamp(parseInt(src.count, 10) || base.count, 5, 60),
-      clefs: clefs.length ? clefs : ["treble"],
+      eachKey,
+      count,
+      clefs,
+      clefCounts,
       keys: keys.length ? keys : ALL_FILES.slice(),
       items,
     };
   }
 
-  function pool() {
-    const clefs = new Set(state.quiz.clefs);
-    const keys = new Set(state.quiz.keys);
-    return CATALOG.filter((k) => clefs.has(k.clef) && keys.has(k.file)).sort((a, b) => {
-      const keyOrder = a.order - b.order;
-      if (keyOrder) return keyOrder;
-      return CLEFS.indexOf(a.clef) - CLEFS.indexOf(b.clef);
-    });
+  function pairItem(file, clef) {
+    return CATALOG.find((k) => k.file === file && k.clef === clef) || null;
   }
 
   function shuffle(list) {
@@ -118,14 +162,45 @@
     return next;
   }
 
+  function evenKeyList(files, total) {
+    if (!files.length || total < 1) return [];
+    const copies = Math.floor(total / files.length);
+    const extra = total % files.length;
+    const list = [];
+    files.forEach((file) => {
+      for (let i = 0; i < copies; i += 1) list.push(file);
+    });
+    shuffle(files.slice())
+      .slice(0, extra)
+      .forEach((file) => list.push(file));
+    return shuffle(list);
+  }
+
   function drawItems() {
-    const source = pool();
-    const count = state.quiz.count;
-    if (!source.length) return [];
-    if (source.length >= count) return shuffle(source).slice(0, count);
+    const files = state.quiz.keys.slice();
+    const counts = state.quiz.clefCounts || emptyClefCounts();
+    const total = sumClefCounts(counts);
+    if (!files.length || total < 1) return [];
+    const keyList = evenKeyList(files, total);
+    const bag = [];
+    CLEFS.forEach((clef) => {
+      for (let i = 0; i < (counts[clef] || 0); i += 1) bag.push(clef);
+    });
+    const remaining = shuffle(bag);
+    const used = new Set();
     const items = [];
-    while (items.length < count) items.push(...shuffle(source));
-    return items.slice(0, count);
+    keyList.forEach((file) => {
+      if (!remaining.length) return;
+      let idx = remaining.findIndex((clef) => !used.has(`${clef}-${file}`));
+      if (idx < 0) idx = 0;
+      const clef = remaining.splice(idx, 1)[0];
+      const item = pairItem(file, clef);
+      if (item) {
+        used.add(item.id);
+        items.push(item);
+      }
+    });
+    return items;
   }
 
   function randomize(keepUndo) {
@@ -140,7 +215,7 @@
   function serialize() {
     const quiz = clone(state.quiz);
     quiz.items = state.quiz.items.map((k) => k.id);
-    return JSON.stringify({ format: "key-signature-minute", version: 1, quiz }, null, 2);
+    return JSON.stringify({ format: "key-signature-minute", version: 2, quiz }, null, 2);
   }
 
   function markDirty() {
@@ -172,13 +247,28 @@
     document.title = `${mark}${state.fileName} — Key Signatures`;
   }
 
+  function itemsMatchCounts(items, counts) {
+    const got = emptyClefCounts();
+    items.forEach((item) => {
+      if (item && item.clef) got[item.clef] = (got[item.clef] || 0) + 1;
+    });
+    return CLEFS.every((c) => (got[c] || 0) === (counts[c] || 0));
+  }
+
   function setQuiz(quiz, fileName, dirty, reshuffleIfEmpty) {
     state.quiz = normalizeQuiz(quiz);
+    state.quiz.preset = matchPreset();
     state.fileName = fileName || state.fileName;
     state.dirty = Boolean(dirty);
     state.undoItems = null;
     els.undo.disabled = true;
-    if (reshuffleIfEmpty && !state.quiz.items.length) state.quiz.items = drawItems();
+    const counts = state.quiz.clefCounts || emptyClefCounts();
+    if (
+      reshuffleIfEmpty &&
+      (!state.quiz.items.length || !itemsMatchCounts(state.quiz.items, counts))
+    ) {
+      state.quiz.items = drawItems();
+    }
     syncFields();
     renderPreview();
     persistScratch();
@@ -196,37 +286,69 @@
     });
   }
 
+  function matchPreset() {
+    const keySet = state.quiz.keys.slice().sort().join(",");
+    const allClefs =
+      state.quiz.clefs.length === CLEFS.length && CLEFS.every((c) => state.quiz.clefs.includes(c));
+    if (keySet === ALL_FILES.slice().sort().join(",") && allClefs) return "split-4clefs";
+    const found = Object.keys(PRESETS).find((name) => {
+      if (name === "split-4clefs") return false;
+      return PRESETS[name].keys.slice().sort().join(",") === keySet;
+    });
+    return found || "custom";
+  }
+
   function applyPreset(name) {
-    const ids = PRESETS[name];
-    if (!ids) return;
+    const preset = PRESETS[name];
+    if (!preset) return;
     state.applyingPreset = true;
     state.quiz.preset = name;
-    state.quiz.keys = ids.slice();
+    state.quiz.keys = preset.keys.slice();
+    if (preset.eachKey) state.quiz.eachKey = preset.eachKey;
+    if (preset.clefs) state.quiz.clefs = preset.clefs.slice();
+    const total = clamp(state.quiz.keys.length * (state.quiz.eachKey || 1), 1, 60);
+    state.quiz.count = total;
+    state.quiz.clefCounts = distributeClefCounts(total, state.quiz.clefs);
+    state.quiz.clefs = CLEFS.filter((c) => state.quiz.clefCounts[c] > 0);
     syncFields();
     state.applyingPreset = false;
     randomize(false);
   }
 
-  function readFiltersFromUI() {
+  function readTextFields() {
     state.quiz.title = els.title.value;
     state.quiz.instructions = els.instructions.value;
     state.quiz.timeLimit = els.time.value;
-    state.quiz.count = clamp(parseInt(els.count.value, 10) || 15, 5, 60);
-    els.count.value = String(state.quiz.count);
-    state.quiz.clefs = checkedValues("clef");
-    if (!state.quiz.clefs.length) {
-      state.quiz.clefs = ["treble"];
-      setChecked("clef", state.quiz.clefs);
-    }
+  }
+
+  function applyEachKeyTotal() {
+    const keys = state.quiz.keys.length || 1;
+    const total = clamp(keys * state.quiz.eachKey, 1, 60);
+    state.quiz.count = total;
+    state.quiz.clefCounts = distributeClefCounts(total, state.quiz.clefs);
+    state.quiz.clefs = CLEFS.filter((c) => state.quiz.clefCounts[c] > 0);
+  }
+
+  function readFiltersFromUI() {
+    readTextFields();
     state.quiz.keys = checkedValues("key");
+    if (!state.quiz.keys.length) state.quiz.keys = ALL_FILES.slice();
     if (!state.applyingPreset) {
-      const current = state.quiz.keys.slice().sort().join(",");
-      const match = Object.keys(PRESETS).find(
-        (name) => PRESETS[name].slice().sort().join(",") === current
-      );
-      state.quiz.preset = match || "custom";
+      state.quiz.preset = matchPreset();
       els.preset.value = state.quiz.preset;
     }
+  }
+
+  function syncClefCountInputs() {
+    const counts = state.quiz.clefCounts || emptyClefCounts();
+    CLEFS.forEach((clef) => {
+      const input = document.querySelector(`input[data-clef-count="${clef}"]`);
+      if (input) {
+        input.value = String(counts[clef] || 0);
+        input.disabled = !state.quiz.clefs.includes(clef);
+      }
+    });
+    setChecked("clef", state.quiz.clefs);
   }
 
   function syncFields() {
@@ -234,10 +356,11 @@
     els.title.value = state.quiz.title;
     els.instructions.value = state.quiz.instructions;
     els.time.value = state.quiz.timeLimit;
+    els.eachKey.value = String(state.quiz.eachKey);
     els.count.value = String(state.quiz.count);
     els.preset.value = PRESETS[state.quiz.preset] ? state.quiz.preset : "custom";
-    setChecked("clef", state.quiz.clefs);
     setChecked("key", state.quiz.keys);
+    syncClefCountInputs();
     state.applyingPreset = false;
   }
 
@@ -252,12 +375,16 @@
   function renderPreview() {
     const isKey = state.previewMode === "key";
     document.body.dataset.print = isKey ? "key" : "student";
-    const available = pool();
-    const repeats = state.quiz.items.length > available.length;
-    const clefBit = state.quiz.clefs.map((c) => ClefLabel[c] || c).join(", ");
-    els.pool.textContent = available.length
-      ? `Pool: ${available.length} unique signatures (${clefBit})${repeats && available.length < state.quiz.count ? " · some will repeat" : ""}`
-      : "Pool: 0 signatures — turn a clef or some keys back on.";
+    const counts = state.quiz.clefCounts || emptyClefCounts();
+    const mix = CLEFS.filter((c) => counts[c] > 0)
+      .map((c) => `${ClefLabel[c]} ${counts[c]}`)
+      .join(", ");
+    const keysN = state.quiz.keys.length;
+    const each = state.quiz.eachKey;
+    const even = keysN > 0 && state.quiz.count === keysN * each;
+    els.pool.textContent = state.quiz.count
+      ? `${state.quiz.count} cards · ${even ? `each of ${keysN} keys × ${each}` : `${keysN} keys, spread evenly`} · ${mix || "no clefs"}`
+      : "0 cards — turn a clef or some keys back on.";
 
     const title = escapeHTML(state.quiz.title || "Key Signatures");
     const keyMark = isKey ? " — KEY" : "";
@@ -396,7 +523,10 @@
   function bind() {
     document.getElementById("clefs").innerHTML = CLEFS.map(
       (clef) =>
-        `<label><input type="checkbox" name="clef" value="${clef}" /> ${ClefLabel[clef]}</label>`
+        `<div class="clef-row">
+          <label><input type="checkbox" name="clef" value="${clef}" /> ${ClefLabel[clef]}</label>
+          <input type="number" min="0" max="60" data-clef-count="${clef}" aria-label="${ClefLabel[clef]} count" />
+        </div>`
     ).join("");
     document.getElementById("keys").innerHTML = KEY_DEFS.map(
       (k) =>
@@ -405,13 +535,27 @@
 
     ["title", "instructions", "time"].forEach((key) => {
       els[key].addEventListener("input", () => {
-        readFiltersFromUI();
+        readTextFields();
         renderPreview();
         markDirty();
       });
     });
+    els.eachKey.addEventListener("change", () => {
+      state.quiz.eachKey = clamp(parseInt(els.eachKey.value, 10) || 1, 1, 8);
+      els.eachKey.value = String(state.quiz.eachKey);
+      applyEachKeyTotal();
+      syncFields();
+      randomize(false);
+    });
     els.count.addEventListener("change", () => {
-      readFiltersFromUI();
+      const total = clamp(parseInt(els.count.value, 10) || 15, 1, 60);
+      state.quiz.count = total;
+      if (state.quiz.keys.length && total % state.quiz.keys.length === 0) {
+        state.quiz.eachKey = total / state.quiz.keys.length;
+      }
+      state.quiz.clefCounts = distributeClefCounts(total, state.quiz.clefs);
+      state.quiz.clefs = CLEFS.filter((c) => state.quiz.clefCounts[c] > 0);
+      syncFields();
       randomize(false);
     });
     els.preset.addEventListener("change", () => {
@@ -422,12 +566,53 @@
       }
       applyPreset(els.preset.value);
     });
-    document.querySelectorAll(".option-set").forEach((set) => {
-      set.addEventListener("change", () => {
-        if (state.applyingPreset) return;
-        readFiltersFromUI();
+    document.getElementById("clefs").addEventListener("change", (event) => {
+      if (state.applyingPreset) return;
+      const t = event.target;
+      if (t && t.matches("input[name='clef']")) {
+        const selected = checkedValues("clef");
+        if (!selected.length) {
+          setChecked("clef", state.quiz.clefs);
+          return;
+        }
+        state.quiz.clefs = selected;
+        state.quiz.clefCounts = distributeClefCounts(state.quiz.count, selected);
+        state.quiz.clefs = CLEFS.filter((c) => state.quiz.clefCounts[c] > 0);
+        if (!state.applyingPreset) {
+          state.quiz.preset = matchPreset();
+          els.preset.value = state.quiz.preset;
+        }
+        syncClefCountInputs();
+        els.count.value = String(sumClefCounts(state.quiz.clefCounts));
+        state.quiz.count = sumClefCounts(state.quiz.clefCounts);
         randomize(false);
-      });
+        return;
+      }
+      if (t && t.matches("input[data-clef-count]")) {
+        const clef = t.getAttribute("data-clef-count");
+        const n = clamp(parseInt(t.value, 10) || 0, 0, 60);
+        state.quiz.clefCounts[clef] = n;
+        if (n > 0 && !state.quiz.clefs.includes(clef)) state.quiz.clefs.push(clef);
+        if (n === 0) state.quiz.clefs = state.quiz.clefs.filter((c) => c !== clef);
+        if (!state.quiz.clefs.length) {
+          state.quiz.clefs = ["treble"];
+          state.quiz.clefCounts.treble = Math.max(1, state.quiz.count);
+        }
+        state.quiz.count = clamp(sumClefCounts(state.quiz.clefCounts), 1, 60);
+        if (!state.applyingPreset) {
+          state.quiz.preset = matchPreset();
+          els.preset.value = PRESETS[state.quiz.preset] ? state.quiz.preset : "custom";
+        }
+        syncFields();
+        randomize(false);
+      }
+    });
+    document.getElementById("keys").addEventListener("change", () => {
+      if (state.applyingPreset) return;
+      readFiltersFromUI();
+      applyEachKeyTotal();
+      syncFields();
+      randomize(false);
     });
 
     document.getElementById("btn-new").addEventListener("click", () => {

@@ -7,7 +7,7 @@
       label: "Identify notes (4 clefs)",
     },
     keys: {
-      src: "key-signatures.html?embed=1&v=2",
+      src: "key-signatures.html?embed=1&v=3",
       label: "Identify key signatures (4 clefs)",
     },
     "write-keys": {

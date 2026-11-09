@@ -35,6 +35,47 @@
   padding: 0;
 }
 
+.clef-rows {
+  display: grid;
+  gap: 6px;
+}
+
+.clef-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px 8px 4px 10px;
+}
+
+.clef-row:has(input[type="checkbox"]:checked) {
+  border-color: var(--accent);
+  background: #eef6f3;
+}
+
+.clef-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.clef-row input[type="number"] {
+  width: 4.2em;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 6px;
+  background: #fff;
+}
+
+.clef-row input[type="number"]:disabled {
+  opacity: 0.45;
+}
+
 .pool-status {
   margin: 0;
   color: var(--muted);
